@@ -1,6 +1,6 @@
 **Docker**
 
-Tutorial introdutório sobre [docker](https://www.docker.com/) para desenvolvimento de aplicações, focando na criação de ambientes isolados e reprodutíveis. Este tutorial vai desde a construação de um Dockerfile até o deploy de containers na AWS, passando por conceitos como containers, dockerHub, volumes, networks e docker-compose. Esse tutorial foi construído a partir do curso em vídeo [Docker & Kubernetes: The Practical Guide 2025 Edition](https://www.udemy.com/course/docker-kubernetes-the-practical-guide/?couponCode=ST7MT290425G3#instructor-2) do [Maximilian Schwarzmüller](https://github.com/maxschwarzmueller).
+Tutorial introdutório sobre [docker](https://www.docker.com/) para desenvolvimento de aplicações, focando na criação de ambientes isolados e reprodutíveis. Este tutorial vai desde a construação de um Dockerfile até o deploy de containers na AWS, passando por conceitos como containerso Docker Hub, volumes, networks e docker-compose. Esse tutorial foi construído a partir do curso em vídeo [Docker & Kubernetes: The Practical Guide 2025 Edition](https://www.udemy.com/course/docker-kubernetes-the-practical-guide/?couponCode=ST7MT290425G3#instructor-2) do [Maximilian Schwarzmüller](https://github.com/maxschwarzmueller).
 Esse tutorial está em constante desenvolvimento, envie sugestões e correções para meu [email](mailto:phrod2007@gmail.com).
 
 ---
@@ -97,7 +97,7 @@ As **imagens** são os templates para os containers, são elas que contêm o có
 
 **3.2.1 Imagens pré-construidas**
 
-As imagens pré-construídas são imagens que foram construídas por pessoas ou organizações, podendo ser oficiais ou não, e você pode usar diretamente no seu projeto sem a necessidade de criar uma do zero. O principal repositório de imagens Docker é o [Dockerhub](https://hub.docker.com/explore) e basta procurar pela imagem desejada. Vamos a um caso prático, iremos executar um container baseado na imagem do [Ubuntu](https://hub.docker.com/_/ubuntu) e também iremos entrar no nosso container Ubuntu para executar comandos e vermos o isolamento em ação. Para conseguirmos a imagem do Ubuntu do Dockerhub, usaremos o comando docker pull com o nome da imagem que queremos puxar e também iremos verificar se o Docker puxou a imagem corretamente com o comando **docker images**.
+As imagens pré-construídas são imagens que foram construídas por pessoas ou organizações, podendo ser oficiais ou não, e você pode usar diretamente no seu projeto sem a necessidade de criar uma do zero. O principal repositório de imagens Docker é oo Docker Hub](https://hub.docker.com/explore) e basta procurar pela imagem desejada. Vamos a um caso prático, iremos executar um container baseado na imagem do [Ubuntu](https://hub.docker.com/_/ubuntu) e também iremos entrar no nosso container Ubuntu para executar comandos e vermos o isolamento em ação. Para conseguirmos a imagem do Ubuntu do Docker Hub, usaremos o comando docker pull com o nome da imagem que queremos puxar e também iremos verificar se o Docker puxou a imagem corretamente com o comando **docker images**.
 
 ```shell
 docker pull ubuntu
@@ -205,7 +205,7 @@ CMD ["npm", "run", "dev", "--", "--host"]
 Após isso podemos executar o docker build
 
 ```shell
-docker build -t formulario-vue:v1 .
+docker build -t forms-vue:v1 .
 ```
 
 Agora iremos executar um container Docker para rodar a aplicação. Usaremos três opções para rodar esse container: **-p porta-do-host:porta-do-container**, que redireciona as portas; o **--name**, que nomeia o container; e o **--rm**, que exclui o container assim que ele é parado.
@@ -214,5 +214,22 @@ Agora iremos executar um container Docker para rodar a aplicação. Usaremos tr�
 docker run -p 8080:5173 --name container-formulario --rm formulario-vue:v1
 ```
 
-Pronto, nossa aplicação está rodando na porta 8080 do [localhost](http://localhost:8080).
+Pronto, nossa aplicação está rodando na porta 8080 do [localhost](http://localhost:8080). Agora podemos colocá-la em um repositório no Docker Hub. Para isso, basta criar uma conta no Docker Hub e criar um repositório. Após a criação do repositório, deve aparecer o comando necessário para enviarmos a imagem:
 
+```shell
+docker push <nome do usuario Docker Hub>/<nome do repositório Dockerhub>:tag
+```
+
+Para que a imagem seja enviada ao repositório, devemos renomeá-la com o nome correto, e podemos fazer isso com o comando **docker tag nomeIMG-original:tag nomeIMG-novo:tag**. O comando **tag** na verdade cria uma nova referência para a imagem original com outro nome. Após renomeá-la, basta usar o comando **push** para enviá-la ao repositório no Docker Hub:
+
+```shell
+docker tag forms-vue:v1 blackvsk/formulario-vue:v1
+docker push blackvsk/formulario-vue:v1 ##lembre-se de usar o seu usuário e o seu repositório
+```
+
+Enfim, nossa imagem Docker está em um repositório no Docker Hub. Podemos até mesmo excluir a imagem local e baixá-la novamente usando o comando **run**:
+
+```shell
+docker rmi blackvsk/formulario-vue:v1
+docker run -p 8080:5173 --name container-vue --rm blackvsk/formulario-vue:v1
+```
