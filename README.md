@@ -140,6 +140,9 @@ docker ps -a
   CONTAINER ID   IMAGE     COMMAND       CREATED          STATUS                     PORTS     NAMES
   231a78b0574c   ubuntu    "/bin/bash"   28 minutes ago   Exited (0) 2 minutes ago             vigilant_stonebraker
   
+docker stop 231a78b0574c
+  231a78b0574c
+
 docker rm 231a78b0574c
   231a78b0574c
 ```
@@ -184,7 +187,7 @@ Após criado o Dockerfile, temos que dar o comando **docker build**, usando **.*
 docker build -t name:tag .
 ```
 
-Vamos para um exemplo prático. Usaremos a aplicação formulario-basico-2infos-2024 em Vue.js do [Eduardo da Silva](https://github.com/eduardo-da-silva), localizado na pasta [exemplos](exemplos/formulario-vue). Iremos começar construindo nosso Dockerfile:
+Vamos para um exemplo prático. Usaremos a aplicação de formulario basico em Vue.js, localizado na pasta [exemplos](exemplos/formulario-vue). Iremos começar construindo nosso Dockerfile dentro da pasta:
 
 ```Dockerfile
 FROM node:18
@@ -202,9 +205,10 @@ EXPOSE 5173  ##porta padrão do vue.js
 CMD ["npm", "run", "dev", "--", "--host"]
 ```
 
-Após isso podemos executar o docker build
+Em seguida devemos navegar no terminal até a pasta do dockerfile e após isso podemos executar o docker build
 
 ```shell
+cd exemplos/formulario-vue
 docker build -t forms-vue:v1 .
 ```
 
@@ -233,3 +237,104 @@ Enfim, nossa imagem Docker está em um repositório no Docker Hub. Podemos até 
 docker rmi blackvsk/formulario-vue:v1
 docker run -p 8080:5173 --name container-vue --rm blackvsk/formulario-vue:v1
 ```
+
+# 4. Volumes e Bind Mount
+
+**4.1 O que são volumes nomeados?**
+
+Volumes são pastas que você informa o ao docker para que ele mapeie para pastas dentro do container, criando um ligação entre essas pastas onde qualquer modificação feita em uma reflete na outra. Isso garante que todos os dados que o conteiners recebem fiquem guardados mesmo que eles sejam derrubados, sendo possível subir um novo container utilizando o mesmo volume.
+
+**4.2 Como utilizar volumes nomeados**
+
+A você pode criar um volume na hora de subir um container do docker com a tag **-v**:
+
+```shell
+docker run -p 80:80 -v <nome do volume/pasta>:<pasta dentro do container> <imagem>
+```
+
+Nos temos o projeto feedback-app na pasta [exemplos](exemplos/feedback-app) que iremos utilizar ver os volumes na prática. A aplicação é simples, uma livraria onde você registra o nome do livro e a descrição dele, uma vez inserido o nome, mais nenhum livro pode receber o mesmo nome. Inicialmente o site não funcionará da forma que queremos pois não temos um volume, então vamos para a implementação na pratica, então começamos buildando a nossa imagem:
+
+```shell
+cd exemplos/feedback-app/
+docker build -t feedback:volume .
+```
+
+Logo em seguida podemos subir nosso container:
+
+```shell
+docker run -p 80:3000 --rm --name fomulario -d feedback:volume
+```
+
+Agora nosso container está rodando em [localhost](http://localhost)(Caso de erro por ter outro container na mesma porta, utilize o comando **Docker stop** para parar o container). Você verá que nossa aplicação ainda está permitindo que você digite o mesmo nome varias vezes pois não estamos guardando as informações em lugar algum. 
+
+![Site com erro](imgs/caso1-feedback.png "Site com erro")
+
+Então vamos arrumar isso, começaremos derrubando o container:
+
+```shell
+docker stop formulario
+```
+
+Na pasta da aplicação temos a pasta [feedback](exemplos/feedback-app/feedback/) que será a pasta conectada a pasta dentro do container. Então podemos subir nosso container novamente mas dessa vez adicionando a tag **-v**:
+
+```shell
+docker run -p 80:3000 --rm --name fomulario -d -v feedback:/app/feedback feedback:volume
+```
+
+Dessa vez ao tentarmos registrar o mesmo livro mais de uma vez, recebemos uma mensagem dizendo que já existe um livro com esse nome e para selecionar outro, ou seja, nosso volume está guardando os dados inseridos na nossa aplicação da forma como queriamos.
+
+![Site funcionando](imgs/caso2-feedback.png "Site funcionando")
+
+E melhor mesmo que derrubemos o container com um **Docker stop**, se levantamos o container com o mesmo volume as informações os livros que registramos ainda estaram presentes lá. Para identificarmos os volumes e após isso quisermos apagar devemos usar os comando:
+
+```shell
+docker volume ls  ##lista volumes
+  DRIVER    VOLUME NAME
+  local     feedback
+
+docker volume rm feedback ##deleta volumes
+```
+
+**4.3 o que são Bind Mounts**
+
+Bind Mounts(ou motagem de ligação) tem função semelhante aos volumes nomeados, sendo também uma pasta na maquina host conectada em uma pasta no container, a diferença é que não iremos criar uma pasta somente para ser volume no host, no lugar disso iremos usar a pasta do nosso projeto como volume. Com isso qualquer alteração feita no código irá sutir efeito imediatamente no container o que é bom no ambiente de desenvolvimento para teste. Vamos a pratica, vá até o arquivo de [css](exemplos/feedback-app/public/styles.css) mude o background do body para black e em seguida note que se carregarmos a página, nossa aplicação continua com o mesmo background. Para mudar teriamos que fazer todo o processo de build novamente, mas ao invés disso vamos derrubar nosso container e adicionar um bind mount que iremos colocar o caminho da pasta [feedback-app](exemplos/feedback-app)(para descobrir basta clicar com o botão direito sobre a pasta e clicar em copiar caminho) e o diretório no container. Mas ao rodarmos o comando recebendo um erro dizendo que o node não achou modulo express presente no node_modules, isso acontece pois eu não dei npm install na minha máquina local e o diretório da minha maquina local sobrescreve o do container.
+
+```shell
+docker run -p 80:3000 --rm --name fomulario -v /home/black/Documentos/docker-tutorial/exemplos/feedback-app:/app feedback:volume
+
+  > data-volume-example@1.0.0 start
+  > node server.js
+
+  node:internal/modules/cjs/loader:1404
+    throw err;
+    ^
+
+  Error: Cannot find module 'express'
+  Require stack:
+  - /app/server.js
+      at Function._resolveFilename (node:internal/modules/cjs/loader:1401:15)
+      at defaultResolveImpl (node:internal/modules/cjs/loader:1057:19)
+      at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1062:22)
+      at Function._load (node:internal/modules/cjs/loader:1211:37)
+      at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+      at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+      at Module.require (node:internal/modules/cjs/loader:1487:12)
+      at require (node:internal/modules/helpers:135:16)
+      at Object.<anonymous> (/app/server.js:5:17)
+      at Module._compile (node:internal/modules/cjs/loader:1730:14) {
+    code: 'MODULE_NOT_FOUND',
+    requireStack: [ '/app/server.js' ]
+  }
+
+Node.js v22.16.0
+```
+
+Dependecias em projetos simples pode ter entre 30-60MB e em projetos maiores pode chegar a 200MB, e isso a longo prazo pode ser um problema para máquinas com armazenamento menor. A solução será usar um **Volume anônimo** que nada mais é que um volume que só vai existir enquanto container estiver no ar, usaremos isso quando quisermos armazenar dados temporáriamente como é o caso do node_modules. Para declarar um volume anônimo basta usar o **-v** e colocar apenas a pasta dentro do container.
+
+```shell
+docker run -p 80:3000 --rm --name fomulario -v /app/node_modules -v /home/black/Documentos/docker-tutorial/exemplos/feedback-app:/app feedback:volume
+```
+
+Pronto agora podemos mexer livremente no nosso código e quando carregarmos a página, teremos nossa aplicação assim como nosso código.
+
+![Bind Mount](imgs/bind-mount.png "Bind Mount")
