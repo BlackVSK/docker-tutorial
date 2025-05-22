@@ -87,7 +87,7 @@ Os **containers** são ambientes isolados que permitem o empacotamento e execuç
 docker run <nome da imagem>
 ```
 
-O subcomando **run** diz ao docker que ele deve executar um comando baseado na imagem que eu determinei. Mas a final o que é uma imagem?
+O subcomando ``run`` diz ao docker que ele deve executar um comando baseado na imagem que eu determinei. Mas a final o que é uma imagem?
 
 **3.2 Imagens**
 
@@ -97,7 +97,7 @@ As **imagens** são os templates para os containers, são elas que contêm o có
 
 **3.2.1 Imagens pré-construidas**
 
-As imagens pré-construídas são imagens que foram construídas por pessoas ou organizações, podendo ser oficiais ou não, e você pode usar diretamente no seu projeto sem a necessidade de criar uma do zero. O principal repositório de imagens Docker é oo Docker Hub](https://hub.docker.com/explore) e basta procurar pela imagem desejada. Vamos a um caso prático, iremos executar um container baseado na imagem do [Ubuntu](https://hub.docker.com/_/ubuntu) e também iremos entrar no nosso container Ubuntu para executar comandos e vermos o isolamento em ação. Para conseguirmos a imagem do Ubuntu do Docker Hub, usaremos o comando docker pull com o nome da imagem que queremos puxar e também iremos verificar se o Docker puxou a imagem corretamente com o comando **docker images**.
+As imagens pré-construídas são imagens que foram construídas por pessoas ou organizações, podendo ser oficiais ou não, e você pode usar diretamente no seu projeto sem a necessidade de criar uma do zero. O principal repositório de imagens Docker é o [Docker Hub](https://hub.docker.com/explore) e basta procurar pela imagem desejada. Vamos a um caso prático, iremos executar um container baseado na imagem do [Ubuntu](https://hub.docker.com/_/ubuntu) e também iremos entrar no nosso container Ubuntu para executar comandos e vermos o isolamento em ação. Para conseguirmos a imagem do Ubuntu do Docker Hub, usaremos o comando docker pull com o nome da imagem que queremos puxar e também iremos verificar se o Docker puxou a imagem corretamente com o comando ``docker images``.
 
 ```shell
 docker pull ubuntu
@@ -113,7 +113,7 @@ docker images
   ubuntu       latest    a0e45e2ce6e6   7 days ago   78.1MB
 ```
 
-Agora vamos executar o container com a imagem do Ubuntu que conseguimos e também o tornaremos interativo com o comando **docker run -it**
+Agora vamos executar o container com a imagem do Ubuntu que conseguimos e também o tornaremos interativo com o comando ``docker run -it``
 
 ```shell
 docker run -it ubuntu
@@ -133,7 +133,7 @@ root@231a78b0574c:/home# exit
   exit
 ```
 
-Como visto, o container está isolado da nossa máquina e podemos configurá-lo conforme nossas necessidades. Podemos ver os containers que estão em execução no momento usando o comando **docker ps** e podemos pará-lo com o comando **docker stop** seguido por seu ID ou nome. Quando o container é interativo, como é o caso desse container Ubuntu, o container se desliga automaticamente quando saímos dele, mas ainda podemos vê-lo usando o comando **docker ps -a** e após isso excluí-lo com o comando **docker rm** seguido por seu ID ou nome. Lembrando que só é possível excluir um container se ele estiver desligado.
+Como visto, o container está isolado da nossa máquina e podemos configurá-lo conforme nossas necessidades. Podemos ver os containers que estão em execução no momento usando o comando ``docker ps`` e podemos pará-lo com o comando ``docker stop`` seguido por seu ID ou nome. Quando o container é interativo, como é o caso desse container Ubuntu, o container se desliga automaticamente quando saímos dele, mas ainda podemos vê-lo usando o comando ``docker ps -a`` e após isso excluí-lo com o comando ``docker rm`` seguido por seu ID ou nome. Lembrando que só é possível excluir um container se ele estiver desligado.
 
 ```shell
 docker ps -a
@@ -147,7 +147,7 @@ docker rm 231a78b0574c
   231a78b0574c
 ```
 
-Após excluir o container, podemos excluir a imagem que já não está mais em uso com o comando **docker rmi** seguido do nome da imagem ou seu ID. Uma imagem não pode ser excluída enquanto houver containers que utilizam essa imagem, então certifique-se de excluir todos os containers que usam essa imagem.
+Após excluir o container, podemos excluir a imagem que já não está mais em uso com o comando ``docker rmi`` seguido do nome da imagem ou seu ID. Uma imagem não pode ser excluída enquanto houver containers que utilizam essa imagem, então certifique-se de excluir todos os containers que usam essa imagem.
 
 ```shell
 docker images
@@ -163,7 +163,7 @@ docker rmi ubuntu
 
 **3.2.2 Imagens pessoais**
 
-Imagens pessoais são aquelas que criamos para projetos específicos usando, ou não, imagens base. Para criarmos uma imagem, vamos precisar criar um arquivo **Dockerfile** no diretório onde se encontra o projeto, e esse Dockerfile terá um template que serve para criar qualquer imagem. O Dockerfile é o arquivo utilizado para criação de imagens docker.
+Imagens pessoais são aquelas que criamos para projetos específicos usando, ou não, imagens base. Para criarmos uma imagem, vamos precisar criar um arquivo ``Dockerfile`` no diretório onde se encontra o projeto, e esse Dockerfile terá um template que serve para criar qualquer imagem. O Dockerfile é o arquivo utilizado para criação de imagens docker.
 
 ```Dockerfile
 FROM <Imagem base>  ##Permite que você crie sua imagem a partir de uma imagem pré-construída
@@ -181,7 +181,7 @@ ENV <variável de ambiente> <valor> ##Define variáveis de ambiente (não recome
 CMD ["<comando1>", "<comando2>"]  ##Diferente do RUN, o CMD irá executar o comando somente quando o container entrar em execução
 ```
 
-Após criado o Dockerfile, temos que dar o comando **docker build**, usando **.** para definir onde o arquivo Dockerfile está e também usaremos a opção **-t** para darmos um nome e uma tag.
+Após criado o Dockerfile, temos que dar o comando ``docker build``, usando ``.`` para definir onde o arquivo Dockerfile está e também usaremos a opção **-t** para darmos um nome e uma tag.
 
 ```shell
 docker build -t name:tag .
@@ -212,7 +212,7 @@ cd exemplos/formulario-vue
 docker build -t forms-vue:v1 .
 ```
 
-Agora iremos executar um container Docker para rodar a aplicação. Usaremos três opções para rodar esse container: **-p porta-do-host:porta-do-container**, que redireciona as portas; o **--name**, que nomeia o container; e o **--rm**, que exclui o container assim que ele é parado.
+Agora iremos executar um container Docker para rodar a aplicação. Usaremos três opções para rodar esse container: ``-p porta-do-host:porta-do-container``, que redireciona as portas; o ``--name``, que nomeia o container; e o ``--rm``, que exclui o container assim que ele é parado.
 
 ```shell
 docker run -p 8080:5173 --name container-formulario --rm formulario-vue:v1
@@ -224,14 +224,14 @@ Pronto, nossa aplicação está rodando na porta 8080 do [localhost](http://loca
 docker push <nome do usuario Docker Hub>/<nome do repositório Dockerhub>:tag
 ```
 
-Para que a imagem seja enviada ao repositório, devemos renomeá-la com o nome correto, e podemos fazer isso com o comando **docker tag nomeIMG-original:tag nomeIMG-novo:tag**. O comando **tag** na verdade cria uma nova referência para a imagem original com outro nome. Após renomeá-la, basta usar o comando **push** para enviá-la ao repositório no Docker Hub:
+Para que a imagem seja enviada ao repositório, devemos renomeá-la com o nome correto, e podemos fazer isso com o comando ``docker tag nomeIMG-original:tag nomeIMG-novo:tag``. O comando ``tag`` na verdade cria uma nova referência para a imagem original com outro nome. Após renomeá-la, basta usar o comando **push** para enviá-la ao repositório no Docker Hub:
 
 ```shell
 docker tag forms-vue:v1 blackvsk/formulario-vue:v1
 docker push blackvsk/formulario-vue:v1 ##lembre-se de usar o seu usuário e o seu repositório
 ```
 
-Enfim, nossa imagem Docker está em um repositório no Docker Hub. Podemos até mesmo excluir a imagem local e baixá-la novamente usando o comando **run**:
+Enfim, nossa imagem Docker está em um repositório no Docker Hub. Podemos até mesmo excluir a imagem local e baixá-la novamente usando o comando ``run``:
 
 ```shell
 docker rmi blackvsk/formulario-vue:v1
@@ -242,50 +242,54 @@ docker run -p 8080:5173 --name container-vue --rm blackvsk/formulario-vue:v1
 
 **4.1 O que são volumes nomeados?**
 
-Volumes são pastas que você informa o ao docker para que ele mapeie para pastas dentro do container, criando um ligação entre essas pastas onde qualquer modificação feita em uma reflete na outra. Isso garante que todos os dados que o conteiners recebem fiquem guardados mesmo que eles sejam derrubados, sendo possível subir um novo container utilizando o mesmo volume.
+Volumes são pastas que você informa ao Docker para que ele mapeie para pastas dentro do container, criando uma ligação entre essas pastas, onde qualquer modificação feita em uma reflete na outra. Isso garante que todos os dados que os containers recebem fiquem guardados mesmo que eles sejam derrubados, sendo possível subir um novo container utilizando o mesmo volume.
 
 **4.2 Como utilizar volumes nomeados**
 
-A você pode criar um volume na hora de subir um container do docker com a tag **-v**:
+Você pode criar um volume na hora de subir um container do Docker com a opção ``-v``:
 
 ```shell
 docker run -p 80:80 -v <nome do volume/pasta>:<pasta dentro do container> <imagem>
 ```
 
-Nos temos o projeto feedback-app na pasta [exemplos](exemplos/feedback-app) que iremos utilizar ver os volumes na prática. A aplicação é simples, uma livraria onde você registra o nome do livro e a descrição dele, uma vez inserido o nome, mais nenhum livro pode receber o mesmo nome. Inicialmente o site não funcionará da forma que queremos pois não temos um volume, então vamos para a implementação na pratica, então começamos buildando a nossa imagem:
+Temos o projeto feedback-app na pasta [exemplos](exemplos/feedback-app), que iremos utilizar para ver os volumes na prática. A aplicação é simples: uma livraria onde você registra o nome do livro e a descrição dele. Uma vez inserido o nome, mais nenhum livro pode receber o mesmo nome.
+
+Inicialmente o site não funcionará da forma que queremos, pois não temos um volume. Então, vamos para a implementação na prática, começando com o build da nossa imagem:
 
 ```shell
 cd exemplos/feedback-app/
 docker build -t feedback:volume .
 ```
 
-Logo em seguida podemos subir nosso container:
+Logo em seguida, podemos subir nosso container:
 
 ```shell
 docker run -p 80:3000 --rm --name fomulario -d feedback:volume
 ```
 
-Agora nosso container está rodando em [localhost](http://localhost)(Caso de erro por ter outro container na mesma porta, utilize o comando **Docker stop** para parar o container). Você verá que nossa aplicação ainda está permitindo que você digite o mesmo nome varias vezes pois não estamos guardando as informações em lugar algum. 
+Agora nosso container está rodando em [localhost](http://localhost). (Caso ocorra erro por já haver outro container na mesma porta, utilize o comando ``docker stop`` para parar o container).
+
+Você verá que nossa aplicação ainda está permitindo que você digite o mesmo nome várias vezes, pois não estamos armazenando as informações em lugar algum.
 
 ![Site com erro](imgs/caso1-feedback.png "Site com erro")
 
-Então vamos arrumar isso, começaremos derrubando o container:
+Então vamos corrigir isso. Começamos derrubando o container:
 
 ```shell
 docker stop formulario
 ```
 
-Na pasta da aplicação temos a pasta [feedback](exemplos/feedback-app/feedback/) que será a pasta conectada a pasta dentro do container. Então podemos subir nosso container novamente mas dessa vez adicionando a tag **-v**:
+Na pasta da aplicação temos a pasta [feedback](exemplos/feedback-app/feedback/), que será conectada à pasta dentro do container. Podemos subir nosso container novamente, desta vez adicionando a opção ``-v``:
 
 ```shell
 docker run -p 80:3000 --rm --name fomulario -d -v feedback:/app/feedback feedback:volume
 ```
 
-Dessa vez ao tentarmos registrar o mesmo livro mais de uma vez, recebemos uma mensagem dizendo que já existe um livro com esse nome e para selecionar outro, ou seja, nosso volume está guardando os dados inseridos na nossa aplicação da forma como queriamos.
+Dessa vez, ao tentarmos registrar o mesmo livro mais de uma vez, recebemos uma mensagem dizendo que já existe um livro com esse nome e para selecionar outro. Ou seja, nosso volume está guardando os dados inseridos na nossa aplicação da forma como queríamos.
 
 ![Site funcionando](imgs/caso2-feedback.png "Site funcionando")
 
-E melhor mesmo que derrubemos o container com um **Docker stop**, se levantamos o container com o mesmo volume as informações os livros que registramos ainda estaram presentes lá. Para identificarmos os volumes e após isso quisermos apagar devemos usar os comando:
+E o melhor: mesmo que derrubemos o container com um ``docker stop``, se levantarmos o container com o mesmo volume, as informações dos livros registrados ainda estarão presentes. Para identificar os volumes e, caso desejado, apagá-los, usamos os comandos:
 
 ```shell
 docker volume ls  ##lista volumes
@@ -297,44 +301,52 @@ docker volume rm feedback ##deleta volumes
 
 **4.3 o que são Bind Mounts**
 
-Bind Mounts(ou motagem de ligação) tem função semelhante aos volumes nomeados, sendo também uma pasta na maquina host conectada em uma pasta no container, a diferença é que não iremos criar uma pasta somente para ser volume no host, no lugar disso iremos usar a pasta do nosso projeto como volume. Com isso qualquer alteração feita no código irá sutir efeito imediatamente no container o que é bom no ambiente de desenvolvimento para teste. Vamos a pratica, vá até o arquivo de [css](exemplos/feedback-app/public/styles.css) mude o background do body para black e em seguida note que se carregarmos a página, nossa aplicação continua com o mesmo background. Para mudar teriamos que fazer todo o processo de build novamente, mas ao invés disso vamos derrubar nosso container e adicionar um bind mount que iremos colocar o caminho da pasta [feedback-app](exemplos/feedback-app)(para descobrir basta clicar com o botão direito sobre a pasta e clicar em copiar caminho) e o diretório no container. Mas ao rodarmos o comando recebendo um erro dizendo que o node não achou modulo express presente no node_modules, isso acontece pois eu não dei npm install na minha máquina local e o diretório da minha maquina local sobrescreve o do container.
+Bind mounts (ou montagem por ligação) têm função semelhante aos volumes nomeados, sendo também uma pasta na máquina host conectada a uma pasta no container. A diferença é que não iremos criar uma pasta exclusivamente para ser volume no host. Em vez disso, usaremos a própria pasta do nosso projeto como volume.
 
-```shell
-docker run -p 80:3000 --rm --name fomulario -v /home/black/Documentos/docker-tutorial/exemplos/feedback-app:/app feedback:volume
+Com isso, qualquer alteração feita no código surtirá efeito imediatamente no container, o que é ótimo em ambientes de desenvolvimento para testes.
 
-  > data-volume-example@1.0.0 start
-  > node server.js
+Vamos à prática. Vá até o arquivo de [css](exemplos/feedback-app/public/styles.css), mude o background do body para black e, em seguida, recarregue a página. Nossa aplicação continuará com o mesmo background. Para mudar, teríamos que fazer todo o processo de build novamente.
 
-  node:internal/modules/cjs/loader:1404
-    throw err;
-    ^
-
-  Error: Cannot find module 'express'
-  Require stack:
-  - /app/server.js
-      at Function._resolveFilename (node:internal/modules/cjs/loader:1401:15)
-      at defaultResolveImpl (node:internal/modules/cjs/loader:1057:19)
-      at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1062:22)
-      at Function._load (node:internal/modules/cjs/loader:1211:37)
-      at TracingChannel.traceSync (node:diagnostics_channel:322:14)
-      at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
-      at Module.require (node:internal/modules/cjs/loader:1487:12)
-      at require (node:internal/modules/helpers:135:16)
-      at Object.<anonymous> (/app/server.js:5:17)
-      at Module._compile (node:internal/modules/cjs/loader:1730:14) {
-    code: 'MODULE_NOT_FOUND',
-    requireStack: [ '/app/server.js' ]
-  }
-
-Node.js v22.16.0
-```
-
-Dependecias em projetos simples pode ter entre 30-60MB e em projetos maiores pode chegar a 200MB, e isso a longo prazo pode ser um problema para máquinas com armazenamento menor. A solução será usar um **Volume anônimo** que nada mais é que um volume que só vai existir enquanto container estiver no ar, usaremos isso quando quisermos armazenar dados temporáriamente como é o caso do node_modules. Para declarar um volume anônimo basta usar o **-v** e colocar apenas a pasta dentro do container.
+Mas, em vez disso, vamos derrubar nosso container e adicionar um bind mount, apontando o caminho da pasta [feedback-app](exemplos/feedback-app/) no host e o diretório correspondente no container. Ao rodarmos o comando, recebemos um erro dizendo que o Node não achou o módulo express presente em node_modules. Isso acontece porque não rodamos npm install na máquina local, e o diretório do host sobrescreve o do container:
 
 ```shell
 docker run -p 80:3000 --rm --name fomulario -v /app/node_modules -v /home/black/Documentos/docker-tutorial/exemplos/feedback-app:/app feedback:volume
 ```
 
-Pronto agora podemos mexer livremente no nosso código e quando carregarmos a página, teremos nossa aplicação assim como nosso código.
+```shell
+> data-volume-example@1.0.0 start
+> node server.js
+
+node:internal/modules/cjs/loader:1404
+  throw err;
+  ^
+
+Error: Cannot find module 'express'
+...
+```
+
+Dependências em projetos simples podem ter entre 30–60MB, e em projetos maiores podem chegar a 200MB. Isso, a longo prazo, pode ser um problema para máquinas com menos armazenamento.
+
+A solução será usar um **volume anônimo**, que é um volume que só existe enquanto o container estiver no ar. Usaremos isso para armazenar dados temporariamente, como é o caso do node_modules.
+
+Para declarar um volume anônimo, basta usar a opção ``-v`` e colocar apenas a pasta dentro do container:
+
+```shell
+docker run -p 80:3000 --rm --name formulario -v /app/node_modules -v /home/black/Documentos/docker-tutorial/exemplos/feedback-app:/app feedback:volume
+```
+
+Pronto! Agora podemos mexer livremente no nosso código e, ao recarregar a página, veremos as mudanças refletidas na aplicação.
 
 ![Bind Mount](imgs/bind-mount.png "Bind Mount")
+
+**4.4 Comparativo entra Volume nomeados, Volumes anônimos e Bind Mount**
+
+| Característica              | **Volume Nomeado**                                     | **Bind Mount**                                             | **Volume Anônimo**                                      |
+|----------------------------|--------------------------------------------------------|------------------------------------------------------------|---------------------------------------------------------|
+| **Criação**                 | Docker gerencia automaticamente                       | Usuário define o caminho completo da pasta no host         | Criado automaticamente e sem nome                       |
+| **Persistência dos dados** | Sim, mesmo após parar/remover o container             | Sim, enquanto o caminho no host existir                   | Não, é temporário (só dura enquanto o container estiver ativo) |
+| **Localização**            | Docker armazena em `/var/lib/docker/volumes/`         | Qualquer caminho válido no sistema de arquivos do host     | Diretório gerenciado automaticamente pelo Docker        |
+| **Uso principal**          | Armazenamento persistente em produção                 | Desenvolvimento, pois reflete alterações em tempo real     | Armazenamento temporário (ex: `node_modules`, cache)    |
+| **Facilidade de backup**   | Fácil, pois os volumes são nomeados e gerenciados     | Médio, depende da estrutura do host                        | Difícil, pois o nome é aleatório e não costuma ser reutilizado |
+| **Portabilidade**          | Alta – não depende de caminhos absolutos              | Baixa – depende da estrutura local do host                 | Baixa – não é reutilizável entre containers             |
+| **Comando de uso**         | `-v volume_nome:/app/pasta`                           | `-v /caminho/absoluto:/app/pasta`                         | `-v /app/pasta` (sem nome do volume no host)           |
