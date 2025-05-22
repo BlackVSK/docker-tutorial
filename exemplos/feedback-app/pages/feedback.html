@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Docker-Tutorial</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1><a href="/">Livraria Docker</a></h1>
+    </header>
+    <main>
+      <section>
+        <h2>Registre seu livro</h2>
+        <form action="/create" method="POST">
+          <div class="form-control">
+            <label for="title">Titulo</label>
+            <input type="text" id="title" name="title" />
+          </div>
+          <div class="form-control">
+            <label for="text">Descrição</label>
+            <textarea name="text" id="text" rows="10"></textarea>
+          </div>
+          <button>Salvar</button>
+          
+        </form>
+      </section>
+    </main>
+  </body>
+</html>
